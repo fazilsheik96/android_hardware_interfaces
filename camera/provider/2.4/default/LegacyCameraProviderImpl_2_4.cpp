@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ *  Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ *   SPDX-License-Identifier: BSD-3-Clause-Clear
+*/
+
 #define LOG_TAG "CamPrvdr@2.4-legacy"
 //#define LOG_NDEBUG 0
 #include <android/log.h>
@@ -298,14 +304,6 @@ bool LegacyCameraProviderImpl_2_4::initialize() {
         ALOGE("%s: Vendor tag setup failed, will not be available.", __FUNCTION__);
     }
 
-    // Setup callback now because we are going to try openLegacy next
-    err = mModule->setCallbacks(this);
-    if (err != OK) {
-        ALOGE("Could not set camera module callback: %d (%s)", err, strerror(-err));
-        mModule.clear();
-        return true;
-    }
-
     mPreferredHal3MinorVersion =
         property_get_int32("ro.vendor.camera.wrapper.hal3TrebleMinorVersion", 3);
     ALOGV("Preferred HAL 3 minor version is %d", mPreferredHal3MinorVersion);
@@ -343,6 +341,14 @@ bool LegacyCameraProviderImpl_2_4::initialize() {
         mCameraStatusMap[cameraIdStr] = CAMERA_DEVICE_STATUS_PRESENT;
 
         addDeviceNames(i);
+    }
+
+    // Setup callback now because we are going to try openLegacy next
+    err = mModule->setCallbacks(this);
+    if (err != OK) {
+        ALOGE("Could not set camera module callback: %d (%s)", err, strerror(-err));
+        mModule.clear();
+        return true;
     }
 
     return false; // mInitFailed
