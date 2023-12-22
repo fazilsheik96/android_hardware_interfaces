@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/*
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 #define LOG_TAG "CamPrvdr@2.4-external"
 //#define LOG_NDEBUG 0
 #include <log/log.h>
@@ -41,10 +45,10 @@ namespace {
 // "device@<version>/external/<id>"
 const std::regex kDeviceNameRE("device@([0-9]+\\.[0-9]+)/external/(.+)");
 const int kMaxDevicePathLen = 256;
-const char* kDevicePath = "/dev/";
-constexpr char kPrefix[] = "video";
-constexpr int kPrefixLen = sizeof(kPrefix) - 1;
-constexpr int kDevicePrefixLen = sizeof(kDevicePath) + kPrefixLen + 1;
+constexpr const char* kDevicePath = "/dev/";
+constexpr const char* kPrefix = "video";
+constexpr int kPrefixLen = std::char_traits<char>::length(kPrefix);
+constexpr int kDevicePrefixLen = std::char_traits<char>::length(kDevicePath) + kPrefixLen;
 
 bool matchDeviceName(int cameraIdOffset,
                      const hidl_string& deviceName, std::string* deviceVersion,
