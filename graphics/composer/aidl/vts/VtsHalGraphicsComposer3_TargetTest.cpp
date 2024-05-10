@@ -2671,7 +2671,7 @@ int main(int argc, char** argv) {
 
     // The binder threadpool we start will inherit sched policy and priority
     // of (this) creating thread. We want the binder thread pool to have
-    // SCHED_RR policy and priority 1 (lowest RT priority)
+    // SCHED_FIFO policy and priority 1 (lowest RT priority)
     // Once the pool is created we reset this thread's priority back to
     // original.
     // This thread policy is based on what we do in the SurfaceFlinger while starting
@@ -2682,7 +2682,7 @@ int main(int argc, char** argv) {
 
     int errorInPriorityModification = sched_getparam(0, &origSchedParam);
     if (errorInPriorityModification == 0) {
-        int policy = SCHED_RR;
+        int policy = SCHED_FIFO;
         newPriority = sched_get_priority_min(policy);
 
         struct sched_param param;
@@ -2699,7 +2699,7 @@ int main(int argc, char** argv) {
         errorInPriorityModification = sched_setscheduler(0, origPolicy, &origSchedParam);
     } else {
         ALOGE("Failed to set VtsHalGraphicsComposer3_TargetTest binder threadpool priority to "
-              "SCHED_RR");
+              "SCHED_FIFO");
     }
 
     return RUN_ALL_TESTS();
